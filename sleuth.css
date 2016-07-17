@@ -1,0 +1,117 @@
+﻿body
+{
+	background: #333333 url('corner-top.png') repeat-x;
+	text-align: center;
+	margin: 0;
+	min-height: 100%;
+}
+
+form
+{
+	margin-top: 10px;
+}
+
+div.halfpanel
+{
+	display: inline-block;
+	min-width: 565px;
+	font-family: 'Lucida Sans Unicode','Lucida Grande',sans-serif;
+	font-weight: bold;
+	font-size: 1em;
+	margin: 10px;
+	vertical-align: top;
+}
+
+#swoosh
+{
+	width: 835;
+	height: 55px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #333333 url('corner-tl.png') no-repeat;
+	z-index: 1;
+}
+
+#logo img
+{
+	position: relative;
+	margin-top: 50px;
+	margin-bottom: 15px;
+	z-index: 2;
+}
+
+.expandBox
+{
+	margin-bottom: 10px;
+}
+
+#submit
+{
+	float: right;
+}
+
+#results
+{
+	display: none;
+	margin: 10px;
+	text-align: center;
+	padding: 1em;
+}
+
+#info
+{
+	font-size: 0.8em;
+	padding: 2.2em 1.6em;
+	display: inline-block;
+	margin: 10px;
+	text-align: left;
+	max-width: 565px;
+}
+
+#about
+{
+	font-size: 0.8em;
+}
+
+#wanya
+{
+	position: relative;
+	top: -70px;
+	right: -70px;
+	float: right;
+	cursor: pointer;
+}
+
+table
+{
+	width: 100%;
+	margin: 0;
+}
+
+.stepfrom
+{
+	text-align: right;
+	padding-right: 1em;
+}
+
+.stepcost
+{
+	text-align: center;
+}
+
+.stepto
+{
+	text-align: left;
+	padding-left: 1em;
+}
+
+.steparrow
+{
+	width: 1.2em;
+}
+
+.steparrow img
+{
+	height: 1em;
+}
