@@ -1,5 +1,7 @@
 ﻿<?php
 	set_time_limit(60);
+	mb_internal_encoding('UTF-8');
+	mb_http_output('UTF-8');
 	require_once('config.php');
 	require_once('lib.php');
 	$db = new \PDO('mysql:host='.$config_mysqlHost.';dbname='.$config_mysqlDatabase.';charset=utf8', $config_mysqlUser, $config_mysqlPassword);
