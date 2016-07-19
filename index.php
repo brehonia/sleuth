@@ -28,9 +28,9 @@
 	<link rel="icon" type="image/x-icon" href="favicon.ico" />
 	<title>SLEUTH</title>
 
-	<link rel="stylesheet" type="text/css" href="jquery-ui/jquery-ui.css" />
-	<script type="text/javascript" src="jquery-1.12.3.min.js"></script>
-	<script type="text/javascript" src="jquery-ui/jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="external/jquery-ui/jquery-ui.css" />
+	<script type="text/javascript" src="external/jquery/jquery-1.12.3.min.js"></script>
+	<script type="text/javascript" src="external/jquery-ui/jquery-ui.min.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="sleuth.css" />
 	<script type="text/javascript">
