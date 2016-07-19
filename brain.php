@@ -33,13 +33,16 @@
 		return;
 	}
 	
+	// mon to skill
 	if ($src_ok && $sk1_ok)
 	{
 		$edges = shortestPathToSkill($db, $src, $sk1)->edges;
 		$edgeCount = count($edges);
-		
 		$lastMon = $src;
+		
 		echo('<table>');
+		
+		// interpret each step in the path as a text instruction: "source => cost => destination"
 		for ($i=0; $i < $edgeCount; $i++)
 		{
 			$srcName = $digimon[$edges[$i]->srcNode->id]->name;
@@ -50,12 +53,15 @@
 				$lastMon = $edges[$i]->srcNode->id;
 			}
 			else $destName = $digimon[$edges[$i]->destNode->id]->name;
+			
 			$levels = $edges[$i]->cost->totalLevels();
 			$levelText = 'Lv'.$levels;
 			if ($levels == 0) $levelText = 'Free';
+			
 			echo('<tr><td class="stepfrom">'.$srcName.'</td><td class="steparrow"><img src="arrow_right.png" /></td><td class="stepcost">'.$levelText.'</td><td class="steparrow"><img src="arrow_right.png" /></td><td class="stepto">'.$destName.'</td></tr>');
 		}
 		
+		// skill to mon
 		if ($dest_ok && ($lastMon != $dest))
 		{
 			$edges = shortestPathToDigimon($db, $lastMon, $dest)->edges;
@@ -65,39 +71,38 @@
 			{
 				$srcName = $digimon[$edges[$i]->srcNode->id]->name;
 				$destName = $digimon[$edges[$i]->destNode->id]->name;
+				
 				$levels = $edges[$i]->cost->totalLevels();
 				$levelText = 'Lv'.$levels;
 				if ($levels == 0) $levelText = 'Free';
+				
 				echo('<tr><td class="stepfrom">'.$srcName.'</td><td class="steparrow"><img src="arrow_right.png" /></td><td class="stepcost">'.$levelText.'</td><td class="steparrow"><img src="arrow_right.png" /></td><td class="stepto">'.$destName.'</td></tr>');
 			}
 		}
+		
 		echo('</table><br />');
 	}
 	
+	// mon to mon
 	if ($src_ok && $dest_ok && !$sk1_ok)
 	{
 		$edges = shortestPathToDigimon($db, $src, $dest)->edges;
 		$edgeCount = count($edges);
 		
-		/*
-		$idArray = array();
-		foreach ($edges as $e)
-		{
-			array_push($idArray, $e->srcNode->id);
-		}
-		$digidata = getSomeDigimon($db, $idArray);
-		*/
-		
 		echo('<table>');
+		
 		for ($i=0; $i < $edgeCount; $i++)
 		{
 			$srcName = $digimon[$edges[$i]->srcNode->id]->name;
 			$destName = $digimon[$edges[$i]->destNode->id]->name;
+			
 			$levels = $edges[$i]->cost->totalLevels();
 			$levelText = 'Lv'.$levels;
 			if ($levels == 0) $levelText = 'Free';
+			
 			echo('<tr><td class="stepfrom">'.$srcName.'</td><td class="steparrow"><img src="arrow_right.png" /></td><td class="stepcost">'.$levelText.'</td><td class="steparrow"><img src="arrow_right.png" /></td><td class="stepto">'.$destName.'</td></tr>');
 		}
+		
 		echo('</table><br />');
 	}
 ?>

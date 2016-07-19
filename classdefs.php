@@ -51,6 +51,7 @@
 			$this->edges = array();
 		}
 		
+		// comparison based on total edge cost
 		static function cmp($a, $b)
 		{
 			$aTotal = $a->cost->total();
@@ -70,20 +71,29 @@
 	
 	class Cost
 	{
+		// weighting for level-independent values
 		const ABI_FUDGE = 5;
 		const CAM_FUDGE = 20;
 		const TRAINING_FUDGE = 10;
 		
+		// minimum level requirement
 		private $levels;
+		
+		// additional levels to raise stat reqs
 		private $statLevels;
+		
+		// farm training beyond max level
 		private $hpTraining;
 		private $spTraining;
 		private $atkTraining;
 		private $defTraining;
 		private $intTraining;
 		private $spdTraining;
+		
+		// level-independent stats
 		private $abiTraining;
 		private $camTraining;
+		
 		private $relaxed;
 		
 		private $totalCache;
@@ -108,60 +118,17 @@
 			$this->totalUpdated = true;
 		}
 		
-		function getLevels()
-		{
-			return $this->levels;
-		}
-		
-		function getStatLevels()
-		{
-			return $this->statLevels;
-		}
-		
-		function getHpTraining()
-		{
-			return $this->hpTraining;
-		}
-		
-		function getSpTraining()
-		{
-			return $this->spTraining;
-		}
-		
-		function getAtkTraining()
-		{
-			return $this->atkTraining;
-		}
-		
-		function getDefTraining()
-		{
-			return $this->defTraining;
-		}
-		
-		function getIntTraining()
-		{
-			return $this->intTraining;
-		}
-		
-		function getSpdTraining()
-		{
-			return $this->spdTraining;
-		}
-		
-		function getAbiTraining()
-		{
-			return $this->abiTraining;
-		}
-		
-		function getCamTraining()
-		{
-			return $this->camTraining;
-		}
-		
-		function getRelaxed()
-		{
-			return $this->relaxed;
-		}
+		function getLevels() { return $this->levels; }
+		function getStatLevels() { return $this->statLevels; }
+		function getHpTraining() { return $this->hpTraining; }
+		function getSpTraining() { return $this->spTraining; }
+		function getAtkTraining() { return $this->atkTraining; }
+		function getDefTraining() { return $this->defTraining; }
+		function getIntTraining() { return $this->intTraining; }
+		function getSpdTraining() { return $this->spdTraining; }
+		function getAbiTraining() { return $this->abiTraining; }
+		function getCamTraining() { return $this->camTraining; }
+		function getRelaxed() { return $this->relaxed; }
 		
 		function setLevels($lv)
 		{
@@ -264,6 +231,7 @@
 		
 		function total()
 		{
+			// result is cached
 			if (!$this->totalUpdated)
 			{
 				return $this->totalCache;
