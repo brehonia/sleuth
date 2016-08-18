@@ -1,226 +1,9 @@
 ﻿<?php
-	class Node
-	{
-		const TYPE_DIGIMON = 1;
-		const TYPE_SKILL = 2;
-		
-		public $id;
-		public $type;
-		
-		function __construct($id, $type)
-		{
-			$this->id = (int) $id;
-			$this->type = (int) $type;
-		}
-	}
+	mb_internal_encoding('UTF-8');
+	mb_http_output('UTF-8');
+	require_once('classdefs.php');
 	
-	class Edge
-	{
-		const TYPE_LUTION = 3;
-		const TYPE_LEARN = 4;
-		
-		public $id;
-		public $type;
-		public $srcNode;
-		public $destNode;
-		public $cost;
-		
-		function __construct($id, $type, $srcNode, $destNode, $cost)
-		{
-			$this->id = (int) $id;
-			$this->type = (int) $type;
-			$this->srcNode = $srcNode;
-			$this->destNode = $destNode;
-			$this->cost = $cost;
-		}
-	}
-	
-	class Path
-	{
-		public $node;
-		public $cost;
-		public $edges;
-		
-		function __construct($node)
-		{
-			$this->node = $node;
-			$this->cost = new Cost(false);
-			$this->edges = array();
-		}
-		
-		static function cmp($a, $b)
-		{
-			$aTotal = $a->cost->total();
-			$bTotal = $b->cost->total();
-			if ($aTotal == $bTotal) return 0;
-			return ($aTotal < $bTotal) ? -1 : 1;
-		}
-		
-		static function indexOf($node, $pathArray)
-		{
-			for ($i = 0; $i < count($pathArray); $i++)
-			{
-				if ($pathArray[$i]->node == $node) return $i;
-			}
-		}
-	}
-	
-	class Cost
-	{
-		const ABI_FUDGE = 5;
-		const CAM_FUDGE = 20;
-		const TRAINING_FUDGE = 10;
-		
-		private $levels;
-		private $statLevels;
-		private $hpTraining;
-		private $spTraining;
-		private $atkTraining;
-		private $defTraining;
-		private $intTraining;
-		private $spdTraining;
-		private $abiTraining;
-		private $camTraining;
-		private $relaxed;
-		
-		private $totalCache;
-		private $totalUpdated;
-		
-		function __construct($relaxed)
-		{
-			$this->relaxed = (bool) $relaxed;
-			
-			$this->levels = 0;
-			$this->statLevels = 0;
-			$this->hpTraining = 0;
-			$this->spTraining = 0;
-			$this->atkTraining = 0;
-			$this->defTraining = 0;
-			$this->intTraining = 0;
-			$this->spdTraining = 0;
-			$this->abiTraining = 0;
-			$this->camTraining = 0;
-			
-			$this->totalCache = 0;
-			$this->totalUpdated = true;
-		}
-		
-		function getLevels()
-		{
-			return $this->levels;
-		}
-		
-		function getStatLevels()
-		{
-			return $this->statLevels;
-		}
-		
-		// todo
-		
-		function getAbiTraining()
-		{
-			return $this->abiTraining;
-		}
-		
-		function getCamTraining()
-		{
-			return $this->camTraining;
-		}
-		
-		function getRelaxed()
-		{
-			return $this->relaxed;
-		}
-		
-		function setLevels($lv)
-		{
-			if ($lv != $this->levels)
-			{
-				$this->totalUpdated = true;
-				$this->levels = $lv;
-			}
-		}
-		
-		function setStatLevels($lv)
-		{
-			if ($lv != $this->statLevels)
-			{
-				$this->totalUpdated = true;
-				$this->statLevels = $lv;
-			}
-		}
-		
-		// todo
-		
-		function setAbiTraining($a)
-		{
-			if ($a != $this->abiTraining)
-			{
-				$this->totalUpdated = true;
-				$this->abiTraining = $a;
-			}
-		}
-		
-		function setCamTraining($c)
-		{
-			if ($c != $this->camTraining)
-			{
-				$this->totalUpdated = true;
-				$this->camTraining = $c;
-			}
-		}
-		
-		function setRelaxed($r)
-		{
-			if ($r != $this->relaxed)
-			{
-				$this->totalUpdated = true;
-				$this->relaxed = $r;
-			}
-		}
-		
-		function total()
-		{
-			if (!$this->totalUpdated)
-			{
-				return $this->totalCache;
-			}
-			
-			$result = (int) $this->levels
-				+ (int) $this->statLevels
-				+ ((int) $this->hpTraining
-					+ (int) $this->spTraining
-					+ (int) $this->atkTraining
-					+ (int) $this->defTraining
-					+ (int) $this->intTraining
-					+ (int) $this->spdTraining) * Cost::TRAINING_FUDGE
-				+ (int) $this->abiTraining * Cost::ABI_FUDGE
-				+ (int) $this->camTraining * Cost::CAM_FUDGE;
-				
-			if (!$this->relaxed) $result += 99999;
-			
-			$this->totalCache = $result;
-			$this->totalUpdated = false;
-			return $result;
-		}
-		
-		function totalLevels()
-		{
-			return $this->levels + $this->statLevels;
-		}
-		
-		function add($otherCost)
-		{
-			$result = new Cost(true);
-			$result->setLevels($this->levels + $otherCost->levels);
-			$result->setStatLevels($this->statLevels + $otherCost->statLevels);
-			// todo
-			$result->setAbiTraining(max($this->abiTraining, $otherCost->abiTraining));
-			$result->setCamTraining(max($this->camTraining, $otherCost->camTraining));
-			return $result;
-		}
-	}
-	
+	// find paths from the specified source node to every other node on a pre-constructed graph
 	function shortestPathsFrom($source, $nodes, $nodeLookup, $edges)
 	{
 		$estimates = array();
@@ -236,18 +19,22 @@
 		$nodeCount = count($estimates);
 		while (count($processed) < $nodeCount)
 		{
+			// target the closest node that hasn't already been processed
 			usort($estimates, "Path::cmp");
 			$currNode = null;
 			foreach ($estimates as $path)
 			{
 				if (!in_array($nodeLookup[$path->node->type][$path->node->id], $processed))
 				{
+					// if we run into an edge that hasn't been relaxed, the remaining nodes are unreachable
 					if (!$path->cost->getRelaxed()) return $estimates;
+					
 					$currNode = $path->node;
 					break;
 				}
 			}
 			
+			// examine all nodes adjacent to the target
 			foreach ($edges as $edge)
 			{
 				if ($edge->srcNode == $currNode)
@@ -255,6 +42,8 @@
 					$srcIdx = Path::indexOf($edge->srcNode, $estimates);
 					$destIdx = Path::indexOf($edge->destNode, $estimates);
 					
+					// if there's no path to this node yet, or if the path we've taken now is shorter, update the estimate
+					// (path to adj node = path to target node + the edge that joins them)
 					if ($estimates[$destIdx]->cost->total() > ($estimates[$srcIdx]->cost->total() + $edge->cost->total()))
 					{
 						$estimates[$destIdx]->edges = array();
@@ -263,6 +52,8 @@
 							array_push($estimates[$destIdx]->edges, $e);
 						}
 						array_push($estimates[$destIdx]->edges, $edge);
+						
+						// the cost addition function propagates relaxation from the source
 						$estimates[$destIdx]->cost = $estimates[$srcIdx]->cost->add($edge->cost);
 					}
 				}
@@ -274,6 +65,7 @@
 		return $estimates;
 	}
 	
+	// find and store paths from the specified digimon to every other digimon and skill
 	function shortestFromId($db, $sourceId)
 	{
 		$nodes = array();
@@ -283,6 +75,8 @@
 		$nodeLookup[Node::TYPE_DIGIMON] = array();
 		$nodeLookup[Node::TYPE_SKILL] = array();
 		
+		// build an array of nodes (mons and skills)
+		// plus a table to look them up by type and database id
 		$query = $db->prepare('select id from digimon');
 		$query->execute();
 		$monRows = $query->fetchAll(\PDO::FETCH_OBJ);
@@ -308,6 +102,7 @@
 			$nodeLookup[$type][$id] = $i + $monCount;
 		}
 		
+		// represent (de-)digivolutions as undirected edges between digimon nodes
 		$query = $db->prepare('select dv.id dvid, dv.*, s.* from digivolution dv inner join stats s on s.id = dv.reqstatsid;');
 		$query->execute();
 		$lutionRows = $query->fetchAll(\PDO::FETCH_OBJ);
@@ -332,7 +127,7 @@
 				array_push($edges, new Edge($lr->dvid, Edge::TYPE_LUTION, $nodes[$upperIdx], $nodes[$lowerTwoIdx], new Cost(true)));
 			}
 		}
-		
+		// represent level requirements for skills as directed edges from digimon nodes to skill nodes
 		$query = $db->prepare('select * from learnskill');
 		$query->execute();
 		$learnRows = $query->fetchAll(\PDO::FETCH_OBJ);
@@ -346,9 +141,11 @@
 			array_push($edges, new Edge($lr->id, Edge::TYPE_LEARN, $nodes[$monIdx], $nodes[$skillIdx], $edgeCost));
 		}
 		
+		// find paths
 		$sourceNode = $nodes[$nodeLookup[Node::TYPE_DIGIMON][$sourceId]];
 		$result = shortestPathsFrom($sourceNode, $nodes, $nodeLookup, $edges);
 		
+		// cache the results in the database
 		$cacheInsert = 'insert into pathcache (srcid, destid, desttype, listpos, edgedestid, lutionid, learnid) values';
 		$values = array();
 		foreach ($result as $p)
@@ -385,6 +182,7 @@
 		return $result;
 	}
 	
+	// retrieve a single path from the database cache
 	function pathsFromCache($db, $sourceId, $targetId, $targetType)
 	{
 		$query = $db->prepare('select

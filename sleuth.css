@@ -15,8 +15,6 @@ div.halfpanel
 {
 	display: inline-block;
 	min-width: 565px;
-	font-family: 'Lucida Sans Unicode','Lucida Grande',sans-serif;
-	font-weight: bold;
 	font-size: 1em;
 	margin: 10px;
 	vertical-align: top;
@@ -24,7 +22,7 @@ div.halfpanel
 
 #swoosh
 {
-	width: 835;
+	width: 835px;
 	height: 55px;
 	position: absolute;
 	top: 0;
@@ -57,6 +55,7 @@ div.halfpanel
 	margin: 10px;
 	text-align: center;
 	padding: 1em;
+	font-size: 1em;
 }
 
 #info
@@ -67,6 +66,7 @@ div.halfpanel
 	margin: 10px;
 	text-align: left;
 	max-width: 565px;
+	font-weight: bold;
 }
 
 #about
@@ -114,4 +114,5 @@ table
 .steparrow img
 {
 	height: 1em;
+	vertical-align: middle;
 }
